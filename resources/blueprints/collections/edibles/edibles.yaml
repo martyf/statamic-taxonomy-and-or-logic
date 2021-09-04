@@ -1,0 +1,31 @@
+title: Edibles
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          validate:
+            - required
+      -
+        handle: colours
+        field:
+          type: terms
+          taxonomies:
+            - colours
+          display: Colours
+          mode: select
+  sidebar:
+    display: Sidebar
+    fields:
+      -
+        handle: slug
+        field:
+          type: slug
+          required: true
+          localizable: true
+          validate:
+            - required

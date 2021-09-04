@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="{{ site:short_locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title ?? site:name }}</title>
+    <link rel="stylesheet" href="{{ mix src='css/tailwind.css' }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-normal">
+
+<div class="max-w-3xl mx-auto px-8 py-12">
+    {{ template_content }}
+
+    <form class="mt-8" method="get" action="/">
+        <h2 class="font-bold text-xl">Select your colours:</h2>
+        <div class="mt-2 space-y-1">
+            {{ taxonomy:colours }}
+            <div class="flex items-center">
+                <input id="colour_{{ slug }}"
+                       type="checkbox"
+                       name="colours[]"
+                       class="text-color-white"
+                       value="{{ slug }}"
+                       {{ if get:colours | contains:slug }}checked{{ /if }}
+                >
+                <label for="colour_{{ slug }}" class="ml-2">{{ title }}</label>
+            </div>
+            {{ /taxonomy:colours }}
+        </div>
+
+        <div class="mt-4">
+            <button class="bg-black text-white px-6 py-2">Filter edibles</button>
+        </div>
+    </form>
+
+    <div class="mt-6 flex flex-col
+                divide-y divide-gray-300
+                md:flex-row md:divide-y-0">
+        <div class="flex-1 py-8 md:pr-4">
+            <h2 class="font-bold text-xl">AND</h2>
+            <div class="prose">
+                <p class="mt-2 leading-tight">Returning edibles with {{ edibles_filter:logic logic="and" }}.</p>
+
+                {{ edibles_filter logic="and" as="edibles" }}
+                {{ if total_results }}
+                <ul class="-mt-4 pl-2">
+                    {{ edibles }}
+                    <li>{{ title }}</li>
+                    {{ /edibles }}
+                </ul>
+                {{ else }}
+                <p class="-mt-4 italic text-gray-300">Nope, nothing.</p>
+                {{ /if }}
+                {{ /edibles_filter}}
+            </div>
+        </div>
+        <div class="flex-1 py-8 md:pl-4">
+            <h2 class="font-bold text-xl">OR</h2>
+            <div class="prose">
+                <p class="mt-2 leading-tight">Returning edibles with {{ edibles_filter:logic logic="or" }}.</p>
+
+                {{ edibles_filter logic="or" as="edibles" }}
+                {{ if total_results }}
+                <ul class="-mt-4 pl-2">
+                    {{ edibles }}
+                    <li>{{ title }}</li>
+                    {{ /edibles }}
+                </ul>
+                {{ else }}
+                <p class="-mt-4 italic text-gray-300">Nope, nothing.</p>
+                {{ /if }}
+                {{ /edibles_filter}}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 prose prose-sm text-gray-400">
+        <p>Want to find out more? Check out my <a href="https://www.martyfriedel.com/blog/filtering-entries-by-taxonomy-in-statamic-3-using-and-or-logic" target="_blank">taxonomy query logic in Statamic 3</a> post.</p>
+    </div>
+</div>
+
+<script src="{{ mix src='/js/site.js' }}"></script>
+</body>
+</html>
